@@ -232,6 +232,8 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.disabled = true;
       submitBtn.textContent = 'Enviando...';
       formStatus.textContent = '';
+      // keep a copy of what was typed: the form is cleared after a successful send
+      const leadData = Object.fromEntries(new FormData(form).entries());
 
       try {
         const response = await fetch(form.action, {
@@ -244,6 +246,8 @@ document.addEventListener('DOMContentLoaded', () => {
           formStatus.textContent = 'Gracias — recibimos tu mensaje. Te respondemos pronto.';
           formStatus.style.color = '#16A34A';
           form.reset();
+          // tell other scripts the lead was sent (cal-booking.js opens the calendar)
+          document.dispatchEvent(new CustomEvent('lead:submitted', { detail: leadData }));
         } else {
           throw new Error('Form submission failed');
         }

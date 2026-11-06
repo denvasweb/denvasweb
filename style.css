@@ -467,6 +467,7 @@ p { line-height: 1.65; }
 .contact { padding: 110px 0; background: var(--off-white); }
 .contact-inner { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 60px; }
 .contact-copy p { margin-bottom: 24px; max-width: 400px; }
+.contact-copy .btn { margin-top: 4px; }
 
 .contact-form { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -481,6 +482,8 @@ p { line-height: 1.65; }
   outline: none; border-color: var(--gold);
 }
 .form-status { margin-top: 12px; font-size: 13.5px; font-weight: 600; text-align: center; min-height: 18px; }
+.cal-retry { margin-top: 12px; }
+.cal-retry[hidden] { display: none; }
 
 /* =========================================================
    FAQ
