@@ -91,6 +91,16 @@ fbq('track', 'PageView');
 .lp-wa svg { width: 22px; height: 22px; fill: #25D366; transition: fill .25s var(--ease); }
 .lp-wa:hover { background: #25D366; color: #fff; transform: translateY(-2px); }
 .lp-wa:hover svg { fill: #fff; }
+.lp-alts { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.lp-cal {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 13px 24px; border-radius: 999px; border: 2px solid var(--gold);
+  background: rgba(255,255,255,0.6); color: var(--ink); font: inherit; font-weight: 700; font-size: 16px; cursor: pointer;
+  transition: transform .25s var(--ease), background .25s var(--ease), color .25s var(--ease);
+}
+.lp-cal svg { width: 20px; height: 20px; fill: var(--gold); transition: fill .25s var(--ease); }
+.lp-cal:hover { background: var(--gold); color: #fff; transform: translateY(-2px); }
+.lp-cal:hover svg { fill: #fff; }
 
 /* Bloque 2: ¿Tienes un negocio de servicios? */
 .lp-who { background: var(--white); padding: 18px 0 26px; text-align: center; }
@@ -210,16 +220,22 @@ fbq('track', 'PageView');
             <input type="text" id="business" name="business" autocomplete="organization" required>
           </div>
           <button type="submit" class="btn btn-primary btn-lg btn-full lp-cta">Pide tu cotización gratis <span class="lp-arrow" aria-hidden="true">→</span></button>
-          <p class="lp-note">Sin compromiso. Al enviar, se abre WhatsApp con tu mensaje listo.</p>
+          <p class="lp-note">Sin compromiso. Al enviar, eliges el día y la hora de tu llamada.</p>
           <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
         </form>
 
         <div class="lp-or"><span>o</span></div>
 
+        <div class="lp-alts">
         <a href="https://wa.me/19177423657?text=Hola%2C%20vi%20el%20video%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n" class="lp-wa" target="_blank" rel="noopener">
           <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.004 3C9.377 3 4 8.373 4 15c0 2.386.7 4.61 1.902 6.482L4 29l7.72-1.86A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3Zm6.98 16.71c-.297.837-1.47 1.53-2.41 1.73-.64.135-1.478.243-4.294-.922-3.605-1.49-5.926-5.148-6.108-5.39-.176-.242-1.463-1.948-1.463-3.714 0-1.766.925-2.634 1.253-2.996.328-.363.716-.454.955-.454.238 0 .478.002.687.013.22.011.516-.083.807.616.297.716 1.01 2.482 1.098 2.663.088.18.147.393.03.635-.12.242-.18.393-.357.605-.176.212-.372.474-.532.635-.177.18-.362.375-.156.735.207.363.92 1.518 1.976 2.46 1.358 1.21 2.503 1.585 2.865 1.766.362.18.573.15.784-.09.212-.24.907-1.06 1.15-1.42.238-.363.478-.303.803-.181.328.12 2.08.982 2.436 1.16.357.18.594.27.68.42.09.15.09.87-.207 1.71Z"/></svg>
           Escríbenos por WhatsApp
         </a>
+        <button type="button" class="lp-cal" data-cal-open>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm13 8H4v9a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9Z"/></svg>
+          Agenda tu llamada gratis
+        </button>
+        </div>
       </div>
     </div>
   </section>
@@ -288,6 +304,7 @@ fbq('track', 'PageView');
 </main>
 
 <script src="/script.js"></script>
+<script src="/cal-booking.js" defer></script>
 <script>
   const NICHO = 'Negocios';
 
@@ -311,28 +328,37 @@ fbq('track', 'PageView');
     }
   });
 
-  // Al enviar el formulario: se mide el lead (GA4 + Meta), se abre WhatsApp con el mensaje ya escrito
-  // y el lead se envía a Web3Forms (a tu correo) en segundo plano.
+  // Al enviar el formulario: el lead se envía a Web3Forms (a tu correo), se mide (GA4 + Meta)
+  // y se abre el calendario de Cal.com (cal-booking.js) con los datos ya puestos.
+  // Si Web3Forms falla, la persona pasa a WhatsApp con su mensaje listo para no perder el lead.
   (function(){
     const form = document.getElementById('contact-form');
     if (!form) return;
     const btn = form.querySelector('button[type="submit"]');
+    const status = document.getElementById('form-status');
     const label = btn.innerHTML;
 
+    function whatsappUrl(d){
+      const msg = 'Hola, vi el video y quiero más información.\n\n' +
+                  'Nombre: ' + d.name + '\n' +
+                  'Negocio: ' + d.business + '\n' +
+                  'WhatsApp/Teléfono: ' + d.phone;
+      return 'https://wa.me/19177423657?text=' + encodeURIComponent(msg);
+    }
+
     // Captura en document para adelantarse al envío (más lento) de script.js
-    document.addEventListener('submit', function(e){
+    document.addEventListener('submit', async function(e){
       if (e.target !== form) return;
       e.preventDefault();
       e.stopImmediatePropagation();
 
       const d = new FormData(form);
-      const msg = 'Hola, vi el video y quiero más información.\n\n' +
-                  'Nombre: ' + d.get('name') + '\n' +
-                  'Negocio: ' + d.get('business') + '\n' +
-                  'WhatsApp/Teléfono: ' + d.get('phone');
+      const lead = { name: d.get('name'), phone: d.get('phone'), business: d.get('business') };
+      lead.whatsappUrl = whatsappUrl(lead);
 
       btn.disabled = true;
-      btn.textContent = 'Abriendo WhatsApp…';
+      btn.textContent = 'Enviando…';
+      status.textContent = '';
 
       // Medición del lead (sin datos personales)
       if (typeof gtag === 'function') {
@@ -342,15 +368,23 @@ fbq('track', 'PageView');
         fbq('track', 'Lead', { content_name: NICHO });
       }
 
-      // keepalive: el envío sigue aunque la página cambie a WhatsApp
+      let sent = false;
       try {
-        fetch(form.action, { method: 'POST', body: d, headers: { 'Accept': 'application/json' }, keepalive: true }).catch(function(){});
+        const res = await fetch(form.action, { method: 'POST', body: d, headers: { 'Accept': 'application/json' } });
+        sent = res.ok;
       } catch (err) {}
 
-      // Pausa mínima para que salgan los eventos de medición antes de cambiar de página
-      setTimeout(function(){
-        window.location.href = 'https://wa.me/19177423657?text=' + encodeURIComponent(msg);
-      }, 250);
+      if (sent) {
+        form.reset();
+        btn.disabled = false;
+        btn.innerHTML = label;
+        // cal-booking.js abre el calendario (tracked: el lead ya se midió arriba)
+        document.dispatchEvent(new CustomEvent('lead:submitted', { detail: Object.assign({ tracked: true }, lead) }));
+      } else {
+        status.textContent = 'No pudimos enviar el formulario. Te llevamos a WhatsApp para que no pierdas tu mensaje.';
+        status.style.color = '#DC2626';
+        setTimeout(function(){ window.location.href = lead.whatsappUrl; }, 1200);
+      }
     }, true);
 
     // Si la persona vuelve desde WhatsApp (botón atrás), el formulario queda listo de nuevo

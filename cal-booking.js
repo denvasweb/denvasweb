@@ -153,8 +153,37 @@
     status.insertAdjacentElement('afterend', btn);
     return btn;
   }
-  function showRetry() { var b = getRetryBtn(); if (b) b.hidden = false; }
-  function hideRetry() { var b = document.getElementById('cal-retry'); if (b) b.hidden = true; }
+  // Optional WhatsApp button: shown only when the page passes a "whatsappUrl" with the lead
+  // (the landing pages do; the home page doesn't).
+  function getWaBtn() {
+    var btn = document.getElementById('cal-wa');
+    if (btn) return btn;
+    var retry = getRetryBtn();
+    if (!retry) return null;
+    btn = document.createElement('a');
+    btn.id = 'cal-wa';
+    btn.className = 'btn btn-ghost btn-full cal-retry cal-wa';
+    btn.target = '_blank';
+    btn.rel = 'noopener';
+    btn.textContent = 'Escríbenos por WhatsApp';
+    btn.hidden = true;
+    retry.insertAdjacentElement('afterend', btn);
+    return btn;
+  }
+  function showRetry() {
+    var b = getRetryBtn();
+    if (b) b.hidden = false;
+    if (lastLead && lastLead.whatsappUrl) {
+      var w = getWaBtn();
+      if (w) { w.href = lastLead.whatsappUrl; w.hidden = false; }
+    }
+  }
+  function hideRetry() {
+    ['cal-retry', 'cal-wa'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.hidden = true;
+    });
+  }
 
   function showMessage(text, success) {
     var status = statusEl();
@@ -223,7 +252,7 @@
   // 1) Form sent OK -> track the lead and open the calendar with the data
   document.addEventListener('lead:submitted', function (e) {
     lastLead = (e && e.detail) || {};
-    track('Lead');
+    if (!lastLead.tracked) track('Lead');   // pages that already measure the lead pass tracked:true
     openCal(lastLead);
   });
 
@@ -240,8 +269,10 @@
   var form = document.getElementById('contact-form');
   if (form) {
     form.addEventListener('focusin', loadCal, { once: true });
-    form.addEventListener('submit', hideRetry);
   }
+  window.addEventListener('submit', function (e) {
+    if (e.target && e.target.id === 'contact-form') hideRetry();
+  }, true);
   document.addEventListener('pointerover', function (e) {
     if (e.target.closest && e.target.closest('[data-cal-open]')) loadCal();
   });
