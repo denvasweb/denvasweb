@@ -330,21 +330,12 @@ fbq('track', 'PageView');
 
   // Al enviar el formulario: el lead se envía a Web3Forms (a tu correo), se mide (GA4 + Meta)
   // y se abre el calendario de Cal.com (cal-booking.js) con los datos ya puestos.
-  // Si Web3Forms falla, la persona pasa a WhatsApp con su mensaje listo para no perder el lead.
   (function(){
     const form = document.getElementById('contact-form');
     if (!form) return;
     const btn = form.querySelector('button[type="submit"]');
     const status = document.getElementById('form-status');
     const label = btn.innerHTML;
-
-    function whatsappUrl(d){
-      const msg = 'Hola, vi el video y quiero más información.\n\n' +
-                  'Nombre: ' + d.name + '\n' +
-                  'Negocio: ' + d.business + '\n' +
-                  'WhatsApp/Teléfono: ' + d.phone;
-      return 'https://wa.me/19177423657?text=' + encodeURIComponent(msg);
-    }
 
     // Captura en document para adelantarse al envío (más lento) de script.js
     document.addEventListener('submit', async function(e){
@@ -354,19 +345,10 @@ fbq('track', 'PageView');
 
       const d = new FormData(form);
       const lead = { name: d.get('name'), phone: d.get('phone'), business: d.get('business') };
-      lead.whatsappUrl = whatsappUrl(lead);
 
       btn.disabled = true;
       btn.textContent = 'Enviando…';
       status.textContent = '';
-
-      // Medición del lead (sin datos personales)
-      if (typeof gtag === 'function') {
-        gtag('event', 'generate_lead', { content_name: NICHO, form_type: 'landing-negocios', transport_type: 'beacon' });
-      }
-      if (typeof fbq === 'function') {
-        fbq('track', 'Lead', { content_name: NICHO });
-      }
 
       let sent = false;
       try {
@@ -374,20 +356,28 @@ fbq('track', 'PageView');
         sent = res.ok;
       } catch (err) {}
 
+      btn.disabled = false;
+      btn.innerHTML = label;
+
       if (sent) {
+        // Medición del lead (sin datos personales): solo cuando el envío salió bien
+        if (typeof gtag === 'function') {
+          gtag('event', 'generate_lead', { content_name: NICHO, form_type: 'landing-negocios', transport_type: 'beacon' });
+        }
+        if (typeof fbq === 'function') {
+          fbq('track', 'Lead', { content_name: NICHO });
+        }
         form.reset();
-        btn.disabled = false;
-        btn.innerHTML = label;
         // cal-booking.js abre el calendario (tracked: el lead ya se midió arriba)
         document.dispatchEvent(new CustomEvent('lead:submitted', { detail: Object.assign({ tracked: true }, lead) }));
       } else {
-        status.textContent = 'No pudimos enviar el formulario. Te llevamos a WhatsApp para que no pierdas tu mensaje.';
+        // Los datos siguen en el formulario para volver a intentar
+        status.textContent = 'No pudimos enviar tus datos. Revisa tu conexión e inténtalo de nuevo.';
         status.style.color = '#DC2626';
-        setTimeout(function(){ window.location.href = lead.whatsappUrl; }, 1200);
       }
     }, true);
 
-    // Si la persona vuelve desde WhatsApp (botón atrás), el formulario queda listo de nuevo
+    // Si la persona vuelve a la página (botón atrás), el formulario queda listo de nuevo
     window.addEventListener('pageshow', function(){
       btn.disabled = false;
       btn.innerHTML = label;

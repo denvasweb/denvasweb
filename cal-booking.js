@@ -153,37 +153,8 @@
     status.insertAdjacentElement('afterend', btn);
     return btn;
   }
-  // Optional WhatsApp button: shown only when the page passes a "whatsappUrl" with the lead
-  // (the landing pages do; the home page doesn't).
-  function getWaBtn() {
-    var btn = document.getElementById('cal-wa');
-    if (btn) return btn;
-    var retry = getRetryBtn();
-    if (!retry) return null;
-    btn = document.createElement('a');
-    btn.id = 'cal-wa';
-    btn.className = 'btn btn-ghost btn-full cal-retry cal-wa';
-    btn.target = '_blank';
-    btn.rel = 'noopener';
-    btn.textContent = 'Escríbenos por WhatsApp';
-    btn.hidden = true;
-    retry.insertAdjacentElement('afterend', btn);
-    return btn;
-  }
-  function showRetry() {
-    var b = getRetryBtn();
-    if (b) b.hidden = false;
-    if (lastLead && lastLead.whatsappUrl) {
-      var w = getWaBtn();
-      if (w) { w.href = lastLead.whatsappUrl; w.hidden = false; }
-    }
-  }
-  function hideRetry() {
-    ['cal-retry', 'cal-wa'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.hidden = true;
-    });
-  }
+  function showRetry() { var b = getRetryBtn(); if (b) b.hidden = false; }
+  function hideRetry() { var b = document.getElementById('cal-retry'); if (b) b.hidden = true; }
 
   function showMessage(text, success) {
     var status = statusEl();
