@@ -223,7 +223,7 @@
   // 1) Form sent OK -> track the lead and open the calendar with the data
   document.addEventListener('lead:submitted', function (e) {
     lastLead = (e && e.detail) || {};
-    track('Lead');
+    if (!lastLead.tracked) track('Lead');   // pages that already measure the lead pass tracked:true
     openCal(lastLead);
   });
 
@@ -240,8 +240,10 @@
   var form = document.getElementById('contact-form');
   if (form) {
     form.addEventListener('focusin', loadCal, { once: true });
-    form.addEventListener('submit', hideRetry);
   }
+  window.addEventListener('submit', function (e) {
+    if (e.target && e.target.id === 'contact-form') hideRetry();
+  }, true);
   document.addEventListener('pointerover', function (e) {
     if (e.target.closest && e.target.closest('[data-cal-open]')) loadCal();
   });
