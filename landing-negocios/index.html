@@ -27,6 +27,7 @@ fbq('track', 'PageView');
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
+<!-- OG PROPIA: cuando esté lista, cambia og:image por https://denvasweb.com/images/og-landing-negocios.jpg (1200x630) -->
 <title>Más llamadas y más clientes para tu negocio de servicios — Denvasweb</title>
 <meta name="description" content="Presencia profesional en internet, Google Maps y más llamadas para tu negocio de servicios. Pide tu cotización gratis.">
 
@@ -132,7 +133,26 @@ fbq('track', 'PageView');
 .lp-video-frame { position: relative; max-width: 720px; margin: 0 auto; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 16px 40px rgba(70,50,10,0.18); }
 .lp-video-frame.is-portrait { max-width: 340px; }
 .lp-video-frame video { display: block; width: 100%; height: 100%; object-fit: contain; background: #000; }
+/* Imágenes nuevas (marcadores) */
+.lp-byline { display: flex; align-items: center; justify-content: center; gap: 14px; max-width: 560px; margin: 0 auto 22px; text-align: left; }
+.lp-byline .lp-sub { margin: 0; max-width: none; text-align: left; }
+.lp-byline-photo { flex: 0 0 72px; width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid var(--gold-light); background: var(--gold-soft, #F1E6C8); }
+.lp-chip-ico { flex: 0 0 auto; width: 22px; height: 22px; display: block; }
+.lp-card.has-img .lp-ico { display: none; }
+.lp-card-img { display: block; width: 100%; height: auto; max-height: 170px; object-fit: contain; order: -1; }
+.lp-work { background: var(--white); padding: 32px 0 34px; text-align: center; }
+.lp-work h2 { font-size: clamp(25px, 4vw, 33px); margin-bottom: 8px; }
+.lp-work-track { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 980px; margin: 18px auto 0; text-align: left; }
+.lp-work-card { margin: 0; }
+.lp-work-card img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); background: var(--off-white); }
+.lp-work-card figcaption { margin-top: 8px; font-size: 15px; font-weight: 700; color: var(--ink); }
 @media (max-width: 720px) {
+  .lp-byline-photo { flex-basis: 60px; width: 60px; height: 60px; }
+  .lp-card-img { order: 0; width: 96px; flex: 0 0 96px; max-height: 128px; align-self: center; }
+  .lp-work { padding: 26px 0 28px; }
+  .lp-work-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding: 0 20px 10px; margin: 16px -20px 0; -webkit-overflow-scrolling: touch; }
+  .lp-work-card { flex: 0 0 82%; scroll-snap-align: center; }
+
   .hero.lp-hero { padding: 24px 0 30px; }
   .lp-hero h1 { font-size: 31px; margin-bottom: 12px; }
   .lp-sub { font-size: 17px; margin-bottom: 18px; }
@@ -174,15 +194,15 @@ fbq('track', 'PageView');
       </picture>
       <h2>¿Tienes un negocio de servicios?</h2>
       <div class="lp-chips">
-        <span class="lp-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Tree Service</span>
-        <span class="lp-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Landscaping</span>
-        <span class="lp-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Limpieza</span>
-        <span class="lp-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Plomería</span>
-        <span class="lp-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>HVAC</span>
-        <span class="lp-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Roofing</span>
-        <span class="lp-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Electricidad</span>
-        <span class="lp-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Pintura</span>
-        <span class="lp-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Construcción</span>
+        <span class="lp-chip"><img class="lp-chip-ico" src="/images/iconos/icono-tree-service.svg" width="48" height="48" alt="" loading="lazy">Tree Service</span>
+        <span class="lp-chip"><img class="lp-chip-ico" src="/images/iconos/icono-landscaping.svg" width="48" height="48" alt="" loading="lazy">Landscaping</span>
+        <span class="lp-chip"><img class="lp-chip-ico" src="/images/iconos/icono-limpieza.svg" width="48" height="48" alt="" loading="lazy">Limpieza</span>
+        <span class="lp-chip"><img class="lp-chip-ico" src="/images/iconos/icono-plomeria.svg" width="48" height="48" alt="" loading="lazy">Plomería</span>
+        <span class="lp-chip"><img class="lp-chip-ico" src="/images/iconos/icono-hvac.svg" width="48" height="48" alt="" loading="lazy">HVAC</span>
+        <span class="lp-chip"><img class="lp-chip-ico" src="/images/iconos/icono-roofing.svg" width="48" height="48" alt="" loading="lazy">Roofing</span>
+        <span class="lp-chip"><img class="lp-chip-ico" src="/images/iconos/icono-electricidad.svg" width="48" height="48" alt="" loading="lazy">Electricidad</span>
+        <span class="lp-chip"><img class="lp-chip-ico" src="/images/iconos/icono-pintura.svg" width="48" height="48" alt="" loading="lazy">Pintura</span>
+        <span class="lp-chip"><img class="lp-chip-ico" src="/images/iconos/icono-construccion.svg" width="48" height="48" alt="" loading="lazy">Construcción</span>
       </div>
     </div>
   </section>
@@ -192,6 +212,7 @@ fbq('track', 'PageView');
     <div class="container">
       <h2>Míralo en video</h2>
       <div class="lp-video-frame" id="video-frame">
+        <!-- PORTADA PROPIA: cuando esté lista (images/video-portada.jpg, misma forma que el video), cambia el poster de abajo -->
         <video id="page-video" controls playsinline preload="none" poster="https://res.cloudinary.com/kat6qihq/video/upload/so_1,f_jpg,q_auto,w_960/v1791249566/video-showcase.jpg" aria-label="Video de Denvasweb">
           <source src="https://res.cloudinary.com/kat6qihq/video/upload/v1791249566/video-showcase.mp4" type="video/mp4">
           Tu navegador no puede reproducir este video.
@@ -207,7 +228,11 @@ fbq('track', 'PageView');
     <div class="container lp-center" style="position:relative;z-index:1;">
       <span class="eyebrow">Para negocios de servicios</span>
       <h1>Más llamadas. Más clientes. Para tu negocio de <span class="accent">servicios</span>.</h1>
-      <p class="lp-sub">Soy Denys. Creo o mejoro tu perfil de Google para que aparezcas en Google Maps, y te armo tu sitio web.</p>
+      <div class="lp-byline">
+        <!-- FOTO: images/denys-foto.webp (400x400) -->
+        <img class="lp-byline-photo" src="/images/denys-foto.webp" width="400" height="400" alt="Denys, de Denvasweb" loading="lazy" decoding="async">
+        <p class="lp-sub">Soy Denys. Creo o mejoro tu perfil de Google para que aparezcas en Google Maps, y te armo tu sitio web.</p>
+      </div>
 
       <div id="contact">
         <form class="contact-form lp-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
@@ -253,19 +278,23 @@ fbq('track', 'PageView');
       <h2>Cómo te ayudamos</h2>
       <p class="lp-lead">Me encargo de ayudarte a construir una presencia que genere oportunidades de trabajo.</p>
       <div class="lp-cards">
-        <div class="lp-card">
+        <div class="lp-card has-img">
           <span class="lp-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
           <div>
             <h3>Página web profesional</h3>
             <p>Tu negocio se ve serio y confiable cuando alguien te busca.</p>
           </div>
+          <!-- IMAGEN: images/pagina-web-telefono.webp (600x800, fondo transparente) -->
+          <img class="lp-card-img" src="/images/pagina-web-telefono.webp" width="600" height="800" alt="Ejemplo de una página web vista en un teléfono" loading="lazy" decoding="async">
         </div>
-        <div class="lp-card">
+        <div class="lp-card has-img">
           <span class="lp-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
           <div>
             <h3>Presencia en Google</h3>
             <p>Creo o mejoro tu perfil de Google para que te encuentren en el mapa cuando buscan un servicio como el tuyo.</p>
           </div>
+          <!-- IMAGEN: images/google-perfil.webp (800x600, fondo transparente) -->
+          <img class="lp-card-img" src="/images/google-perfil.webp" width="800" height="600" alt="Ilustración de un perfil de negocio en un mapa" loading="lazy" decoding="async">
         </div>
         <div class="lp-card">
           <span class="lp-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
@@ -281,6 +310,31 @@ fbq('track', 'PageView');
         <div class="lp-actions">
           <a href="#contact" class="btn btn-primary btn-lg lp-cta">Pide tu cotización gratis <span class="lp-arrow" aria-hidden="true">→</span></a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRABAJOS REALES (solo con permiso de cada cliente) -->
+  <section class="lp-work" id="trabajos">
+    <div class="container">
+      <h2>Trabajos que ya hice</h2>
+      <p class="lp-lead">Mostrados con permiso de cada cliente.</p>
+      <div class="lp-work-track">
+        <figure class="lp-work-card">
+          <!-- IMAGEN: images/trabajo-1.webp (1200x800) -->
+          <img src="/images/trabajo-1.webp" width="1200" height="800" alt="[Describe el trabajo 1]" loading="lazy" decoding="async">
+          <figcaption>[Oficio · Ciudad, estado]</figcaption>
+        </figure>
+        <figure class="lp-work-card">
+          <!-- IMAGEN: images/trabajo-2.webp (1200x800) -->
+          <img src="/images/trabajo-2.webp" width="1200" height="800" alt="[Describe el trabajo 2]" loading="lazy" decoding="async">
+          <figcaption>[Oficio · Ciudad, estado]</figcaption>
+        </figure>
+        <figure class="lp-work-card">
+          <!-- IMAGEN: images/trabajo-3.webp (1200x800) -->
+          <img src="/images/trabajo-3.webp" width="1200" height="800" alt="[Describe el trabajo 3]" loading="lazy" decoding="async">
+          <figcaption>[Oficio · Ciudad, estado]</figcaption>
+        </figure>
       </div>
     </div>
   </section>
